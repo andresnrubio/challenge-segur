@@ -3,10 +3,10 @@ import NavBar from './NavBar';
 
 const SideBar = () => {
   return (
-    <section className=" row-span-2 h-dvh w-64 bg-teal-900">
+    <div className=" w-70 row-span-2 h-dvh min-w-64 bg-soft-white shadow-lg">
       <Header />
       <NavBar />
-    </section>
+    </div>
   );
 };
 
