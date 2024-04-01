@@ -19,6 +19,7 @@ const Register = () => {
     },
   });
   const { encryptedData, encryptAndSaveData, decryptData } = useCrypto();
+  const secretKey = import.meta.env.VITE_REACT_APP_SECRET_KEY;
 
   return (
     <>
@@ -34,6 +35,7 @@ const Register = () => {
             action="#"
             method="POST"
             onSubmit={handleSubmit((data) => {
+              console.log(data);
               encryptAndSaveData(data, secretKey);
             })}
           >
@@ -169,7 +171,7 @@ const Register = () => {
             <div>
               <button
                 type="submit"
-                className="hover:bg-indigo-500 bg-blue-action mt-12 flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                className="hover:bg-indigo-500 mt-12 flex w-full justify-center rounded-md bg-blue-action px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 Sign in
               </button>

@@ -2,12 +2,14 @@ import { createBrowserRouter, createRoutesFromElements, Route, Navigate } from '
 import App from './App';
 import Login from './components/Login';
 import Register from './components/Register.jsx';
+import UsersList from './components/UsersList.jsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
       <Route path="login" element={<Login />} />
       <Route path="register" element={<Register />} />
+      <Route path="manager" element={<UsersList />} />
       {/* <Route path="" element={<Home />} />
       <Route path="projects" element={<h1>projects</h1>} />
       <Route path="about" element={<h1>sobre mi</h1>} />

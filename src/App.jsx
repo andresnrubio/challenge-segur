@@ -6,7 +6,7 @@ function App() {
   return (
     <div className="flex bg-soft-white ">
       <SideBar />
-      <main className="container flex justify-center">
+      <main className="container flex h-dvh justify-start overflow-auto py-16">
         <Outlet />
       </main>
     </div>
