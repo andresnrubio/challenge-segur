@@ -35,6 +35,9 @@ export default {
       height: {
         1: '1px',
       },
+      gridTemplateColumns: {
+        '4-50px/3fr': '50px repeat(3, minmax(0, 1fr))',
+      },
     },
   },
   plugins: [],
