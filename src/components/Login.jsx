@@ -3,12 +3,13 @@ import { Link } from 'react-router-dom';
 import logo from '../assets/logo.png';
 
 import useCrypto from '../hooks/useCrypto';
+import useSession from '../hooks/useSession';
 
 const secretKey = import.meta.env.VITE_REACT_APP_SECRET_KEY;
 
 const Login = () => {
   const { encryptedData, encryptAndSaveData, decryptData } = useCrypto();
-  console.log(secretKey);
+  const { login } = useSession();
 
   const {
     register,
@@ -36,7 +37,11 @@ const Login = () => {
             action="#"
             method="POST"
             onSubmit={handleSubmit((data) => {
-              encryptAndSaveData(data, secretKey);
+              try {
+                login(data);
+              } catch (error) {
+                console.log(error);
+              }
             })}
           >
             <div>
@@ -102,7 +107,6 @@ const Login = () => {
             </Link>
           </p>
         </div>
-        <button onClick={() => console.log(decryptData(secretKey))}>Decript</button>
       </div>
     </>
   );

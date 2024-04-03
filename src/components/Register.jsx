@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import logo from '../assets/logo.png';
 import useCrypto from '../hooks/useCrypto';
+import useUsers from '../hooks/useUsers';
 
 const Register = () => {
   const {
@@ -18,8 +20,7 @@ const Register = () => {
       tel: '',
     },
   });
-  const { encryptedData, encryptAndSaveData, decryptData } = useCrypto();
-  const secretKey = import.meta.env.VITE_REACT_APP_SECRET_KEY;
+  const { users, registerNewUser, registerStatus } = useUsers();
 
   return (
     <>
@@ -32,11 +33,19 @@ const Register = () => {
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <form
             className="space-y-6"
-            action="#"
-            method="POST"
-            onSubmit={handleSubmit((data) => {
-              console.log(data);
-              encryptAndSaveData(data, secretKey);
+            onSubmit={handleSubmit(async (data) => {
+              try {
+                const userData = {
+                  name: data.name,
+                  lastname: data.lastname,
+                  email: data.email,
+                  password: data.password,
+                  tel: `+${data.countryCode}${data.tel}}`,
+                };
+                await registerNewUser(userData);
+              } catch (error) {
+                console.log(error);
+              }
             })}
           >
             <div className="flex justify-between">
@@ -52,7 +61,7 @@ const Register = () => {
                   autoComplete="name"
                   className=" mt-2 block w-full rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
-                <p className="absolute mt-1 text-xs italic text-red-500">{errors.name?.message || ''}</p>
+                <p className=" mt-1 text-xs italic text-red-500">{errors.name?.message || ''}</p>
               </div>
               <div>
                 <div>
@@ -67,7 +76,7 @@ const Register = () => {
                     autoComplete="family-name"
                     className="mt-2 block w-full rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
-                  <p className="absolute mt-1 text-xs italic text-red-500">{errors.lastname?.message || ''}</p>
+                  <p className=" mt-1 text-xs italic text-red-500">{errors.lastname?.message || ''}</p>
                 </div>
               </div>
             </div>
@@ -85,7 +94,7 @@ const Register = () => {
                   autoComplete="tel-country-code"
                   className="mt-2 block w-20 rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
-                <p className="absolute mt-1 text-xs italic text-red-500">{errors.area?.message || ''}</p>
+                <p className=" mt-1 text-xs italic text-red-500">{errors.area?.message || ''}</p>
               </div>
               <div className="w-full">
                 <label htmlFor="tel" className="block text-sm font-medium leading-6 text-gray-900">
@@ -99,7 +108,7 @@ const Register = () => {
                   autoComplete="tel-national"
                   className="mt-2 block w-full rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
-                <p className="absolute mt-1 text-xs italic text-red-500">{errors.tel?.message || ''}</p>
+                <p className=" mt-1 text-xs italic text-red-500">{errors.tel?.message || ''}</p>
               </div>
             </div>
             <div>
@@ -107,14 +116,16 @@ const Register = () => {
                 Correo electrónico
               </label>
               <input
-                {...register('email', { required: 'Ingrese su correo electrónico' })}
+                {...register('email', {
+                  required: 'Ingrese su correo electrónico',
+                })}
                 id="email"
                 name="email"
                 type="email"
                 autoComplete="email"
                 className="mt-2 block w-full rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
-              <p className="absolute mt-1 text-xs italic text-red-500">{errors.email?.message || ''}</p>
+              <p className=" mt-1 text-xs italic text-red-500">{errors.email?.message || ''}</p>
             </div>
             <div className="flex justify-between">
               <div>
@@ -140,9 +151,9 @@ const Register = () => {
                   name="password"
                   type="password"
                   autoComplete="current-password"
-                  className="mt-2 block w-full rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="mt-2 block rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
-                <p className="absolute mt-1 text-xs italic text-red-500">{errors.password?.message || ''}</p>
+                <p className=" mt-1 text-xs italic text-red-500">{errors.password?.message || ''}</p>
               </div>
 
               <div>
@@ -160,21 +171,20 @@ const Register = () => {
                   id="passwordConfirmation"
                   name="passwordConfirmation"
                   type="password"
-                  className="mt-2 block w-full rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="mt-2 block rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
-                <p className="absolute mt-1 text-xs italic text-red-500">
-                  {errors.passwordConfirmation?.message || ''}
-                </p>
+                <p className=" mt-1 text-xs italic text-red-500">{errors.passwordConfirmation?.message || ''}</p>
               </div>
             </div>
 
             <div>
               <button
                 type="submit"
-                className="hover:bg-indigo-500 mt-12 flex w-full justify-center rounded-md bg-blue-action px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                className="hover:bg-indigo-500 bg-blue-action mt-12 flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 Sign in
               </button>
+              <p className=" mt-1 text-xs italic text-red-500">{registerStatus.error?.message || ''}</p>
             </div>
           </form>
 

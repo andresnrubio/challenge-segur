@@ -1,122 +1,152 @@
 [
   {
+    "id": 1,
     "name": "Andres",
     "lastname": "Rubio",
     "phone": "+5411111222",
     "email": "rubioandres1@gmail.com",
     "role": "admin",
-    "profileImg": "https://robohash.org/AndresRubio"
+    "profileImg": "https://robohash.org/AndresRubio",
+    "password": "aA123456"
   },
   {
+    "id": 2,
     "name": "Carlos",
     "lastname": "Perez",
     "phone": "+5411111222",
     "email": "carlosperez@gmail.com",
     "role": "consulta",
-    "profileImg": "https://robohash.org/Carlos"
+    "profileImg": "https://robohash.org/Carlos",
+    "password": "aA123456"
   },
   {
+    "id": 3,
     "name": "Sophia",
     "lastname": "Johnson",
     "phone": "+1234567890",
     "email": "sophia.johnson@example.com",
     "role": "consulta",
-    "profileImg": "https://robohash.org/Sophia"
+    "profileImg": "https://robohash.org/Sophia",
+    "password": "aA123456"
   },
   {
+    "id": 4,
     "name": "Michael",
     "lastname": "Smith",
     "phone": "+1234567890",
     "email": "michael.smith@example.com",
     "role": "vendedor",
-    "profileImg": "https://robohash.org/Michael"
+    "profileImg": "https://robohash.org/Michael",
+    "password": "aA123456"
   },
   {
+    "id": 5,
     "name": "Emma",
     "lastname": "Williams",
     "phone": "+1234567890",
     "email": "emma.williams@example.com",
     "role": "vendedor",
-    "profileImg": "https://robohash.org/Emma"
+    "profileImg": "https://robohash.org/Emma",
+    "password": "aA123456"
   },
   {
+    "id": 6,
     "name": "James",
     "lastname": "Brown",
     "phone": "+1234567890",
     "email": "james.brown@example.com",
     "role": "vendedor",
-    "profileImg": "https://robohash.org/James"
+    "profileImg": "https://robohash.org/James",
+    "password": "aA123456"
   },
   {
+    "id": 7,
     "name": "Olivia",
     "lastname": "Jones",
     "phone": "+1234567890",
     "email": "olivia.jones@example.com",
     "role": "vendedor",
-    "profileImg": "https://robohash.org/Olivia"
+    "profileImg": "https://robohash.org/Olivia",
+    "password": "aA123456"
   },
   {
+    "id": 8,
     "name": "William",
     "lastname": "Miller",
     "phone": "+1234567890",
     "email": "william.miller@example.com",
     "role": "gerente",
-    "profileImg": "https://robohash.org/William"
+    "profileImg": "https://robohash.org/William",
+    "password": "aA123456"
   },
   {
+    "id": 9,
     "name": "Ava",
     "lastname": "Davis",
     "phone": "+1234567890",
     "email": "ava.davis@example.com",
     "role": "gerente",
-    "profileImg": "https://robohash.org/Ava"
+    "profileImg": "https://robohash.org/Ava",
+    "password": "aA123456"
   },
   {
+    "id": 10,
     "name": "Alexander",
     "lastname": "Garcia",
     "phone": "+1234567890",
     "email": "alexander.garcia@example.com",
     "role": "atencionalcliente",
-    "profileImg": "https://robohash.org/Alexander"
+    "profileImg": "https://robohash.org/Alexander",
+    "password": "aA123456"
   },
   {
+    "id": 11,
     "name": "Mia",
     "lastname": "Martinez",
     "phone": "+1234567890",
     "email": "mia.martinez@example.com",
     "role": "atencionalcliente",
-    "profileImg": "https://robohash.org/Mia"
+    "profileImg": "https://robohash.org/Mia",
+    "password": "aA123456"
   },
   {
+    "id": 12,
     "name": "Ethan",
     "lastname": "Hernandez",
     "phone": "+1234567890",
     "email": "ethan.hernandez@example.com",
     "role": "atencionalcliente",
-    "profileImg": "https://robohash.org/Ethan"
+    "profileImg": "https://robohash.org/Ethan",
+    "password": "aA123456"
   },
   {
+    "id": 13,
     "name": "Isabella",
     "lastname": "Lopez",
     "phone": "+1234567890",
     "email": "isabella.lopez@example.com",
     "role": "atencionalcliente",
-    "profileImg": "https://robohash.org/Isabella"
+    "profileImg": "https://robohash.org/Isabella",
+    "password": "aA123456"
   },
   {
+    "id": 14,
     "name": "Lucas",
     "lastname": "Gonzalez",
     "phone": "+1234567890",
     "email": "lucas.gonzalez@example.com",
     "role": "atencionalcliente",
-    "profileImg": "https://robohash.org/Lucas"
+    "profileImg": "https://robohash.org/Lucas",
+    "password": "aA123456"
   },
   {
+    "id": 15,
     "name": "Charlotte",
     "lastname": "Wilson",
     "phone": "+1234567890",
     "email": "charlotte.wilson@example.com",
     "role": "atencionalcliente",
-    "profileImg": "https://robohash.org/Charlotte"
+    "profileImg": "https://robohash.org/Charlotte",
+    "password": "aA123456"
   }
 ]
