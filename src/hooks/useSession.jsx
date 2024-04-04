@@ -12,10 +12,12 @@ const useSession = () => {
     addAllUsers,
     removeUser,
     loggedUser,
+    addFilterUsers,
   } = useStore((state) => ({
     users: state.users,
     setLoggedUser: state.setLoggedUser,
     addAllUsers: state.addAllUsers,
+    addFilterUsers: state.addFilterUsers,
     removeUser: state.removeUser,
     loggedUser: state.loggedUser,
   }));
@@ -39,6 +41,7 @@ const useSession = () => {
       // setEncryptedData(encryptedData);
 
       setLoggedUser(user);
+      addFilterUsers();
       navigate('/manager');
     } catch (error) {
       console.log(error);

@@ -1,42 +1,56 @@
 import { useState } from 'react';
 import usersData from '../data/users.json';
+import useStore from '../store/store';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 const useUsers = () => {
+  const navigate = useNavigate();
+
   const [users, setUsers] = useState(usersData);
+  const {
+    users: storeUsers,
+    setLoggedUser,
+    createUser,
+    addFilterUsers,
+  } = useStore((state) => ({
+    users: state.users,
+    setLoggedUser: state.setLoggedUser,
+    addFilterUsers: state.addFilterUsers,
+    createUser: state.createUser,
+  }));
+
+  const getMaxId = () => {
+    return storeUsers.reduce((maxId, user) => {
+      return user.id > maxId ? user.id : maxId;
+    }, 0);
+  };
   const [registerStatus, setRegisterStatus] = useState({});
 
   const registerNewUser = async (data) => {
-    //* Se deberia trabajar con algun modelo?
-
     try {
-      const userExists = users.find((user) => user.email === data.email);
+      const userExists = storeUsers.find((user) => user.email === data.email);
       if (userExists) {
-        console.log(users);
         setRegisterStatus({
           error: {
             message: 'Ya existe un registro con ese correo',
           },
         });
-        throw new Error('Ya existe un registro con ese correo');
+        toast.error('Ya existe un registro con ese correo');
+        // throw new Error('Ya existe un registro con ese correo');
       }
 
-      //* Genera un id unico - utilizo la busqueda del id mas alto generado y le sumo uno (en casos de BD el id seria proporcionado por el BE)
-      const highestId = users.reduce((maxId, user) => {
-        return user.id > maxId ? user.id : maxId;
-      }, 0);
+      const nextId = getMaxId() + 1;
+      const newUser = { ...data, id: nextId, role: 'consulta', profileImg: `https://robohash.org/${data.name}` };
+      setUsers([...users, newUser]);
 
-      setUsers([
-        ...users,
-        {
-          ...data,
-          id: highestId + 1,
-          role: 'consulta',
-          profileImg: `https://robohash.org/${data.name}${data.lastname}`,
-        },
-      ]);
+      createUser(newUser);
+      setLoggedUser(newUser);
+      addFilterUsers();
 
-      //* Se genera un inicio de sesion con el nuevo usuario
-      localStorage.setItem('user', { name: data.name, lastname: data.lastname, role: data.role });
+      toast.success('Usuario registrado correctamente');
+
+      navigate('/manager');
     } catch (error) {
       throw error;
     }

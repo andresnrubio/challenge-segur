@@ -1,11 +1,15 @@
-import { useState } from 'react';
+import { toast } from 'react-toastify';
+import useStore from '../store/store';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
-import logo from '../assets/logo.png';
-import useCrypto from '../hooks/useCrypto';
-import useUsers from '../hooks/useUsers';
+import { useEffect } from 'react';
 
-const Register = () => {
+const Modal = ({ user, onClose }) => {
+  const { updateUser, loggedUser, setLoggedUser } = useStore((state) => ({
+    updateUser: state.updateUser,
+    loggedUser: state.loggedUser,
+    setLoggedUser: state.setLoggedUser,
+  }));
+
   const {
     register,
     handleSubmit,
@@ -13,37 +17,62 @@ const Register = () => {
     watch,
   } = useForm({
     defaultValues: {
-      name: '',
-      email: '',
-      password: '',
-      countryCode: '',
-      tel: '',
+      name: user.name,
+      lastname: user.lastname,
+      email: user.email,
+      tel: user.tel,
+      countryCode: user.countryCode,
+      role: user.role,
     },
   });
-  const { users, registerNewUser, registerStatus } = useUsers();
+  const shouldUpdateLoggedUser = () => loggedUser.id === user.id;
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest('#modal-content')) {
+        onClose();
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [onClose]);
 
   return (
-    <>
-      <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <img className="mx-auto h-14 w-auto" src={logo} alt="Admin users" />
-          <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Registro</h2>
+    <div className="fixed inset-0 z-10 overflow-y-auto">
+      <div className="flex min-h-screen content-center items-end justify-center px-4 pb-20 pt-4 text-center sm:block sm:p-0">
+        <div className="fixed inset-0 transition-opacity">
+          <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
         </div>
 
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+        <div
+          className="inline-block transform overflow-hidden rounded-lg bg-white text-left align-bottom shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:align-middle"
+          id="modal-content"
+        >
           <form
-            className="space-y-6"
+            className="space-y-6 p-4"
             onSubmit={handleSubmit(async (data) => {
               try {
+                const { name, lastname, email, countryCode, tel, role } = data;
                 const userData = {
-                  name: data.name,
-                  lastname: data.lastname,
-                  email: data.email,
-                  password: data.password,
-                  countryCode: data.countryCode,
-                  tel: data.tel,
+                  name,
+                  lastname,
+                  email,
+                  role,
+                  countryCode,
+                  tel,
                 };
-                await registerNewUser(userData);
+
+                updateUser({ ...user, ...userData });
+                toast.success('Usuario actualizado correctamente');
+                if (shouldUpdateLoggedUser()) {
+                  setLoggedUser({ ...loggedUser, ...userData });
+                }
+
+                onClose();
               } catch (error) {
                 console.log(error);
               }
@@ -128,77 +157,47 @@ const Register = () => {
               />
               <p className=" mt-1 text-xs italic text-red-500">{errors.email?.message || ''}</p>
             </div>
-            <div className="flex justify-between">
-              <div>
-                <div className="flex items-center justify-between">
-                  <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
-                    Contraseña
-                  </label>
-                </div>
-                <input
-                  {...register('password', {
-                    required: 'Complete el campo',
-                    minLength: {
-                      value: 8,
-                      message: 'La contraseña debe tener mínimo 8 caracteres',
-                    },
-                    pattern: {
-                      value: /(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}/,
-                      message:
-                        'Por seguridad la contraseña debe incluir al menos una mayúscula, una minúscula y un número',
-                    },
-                  })}
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete="current-password"
-                  className="mt-2 block rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                />
-                <p className=" mt-1 text-xs italic text-red-500">{errors.password?.message || ''}</p>
-              </div>
-
-              <div>
-                <div className="flex items-center justify-between">
-                  <label htmlFor="passwordConfirmation" className="block text-sm font-medium leading-6 text-gray-900">
-                    Confirma contraseña
-                  </label>
-                </div>
-                <input
-                  {...register('passwordConfirmation', {
-                    validate: (value) => {
-                      return value === watch('password') || 'La contraseña no coincide';
-                    },
-                  })}
-                  id="passwordConfirmation"
-                  name="passwordConfirmation"
-                  type="password"
-                  className="mt-2 block rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                />
-                <p className=" mt-1 text-xs italic text-red-500">{errors.passwordConfirmation?.message || ''}</p>
-              </div>
-            </div>
 
             <div>
+              <label htmlFor="role" className="block text-sm font-medium leading-6 text-gray-900">
+                Role
+              </label>
+              <select
+                {...register('role', {
+                  required: 'Please select a role',
+                })}
+                id="role"
+                name="role"
+                className="mt-2 block w-full rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              >
+                <option value="admin">Admin</option>
+                <option value="consulta">Consulta</option>
+                <option value="vendedor">Vendedor</option>
+                <option value="gerente">Gerente</option>
+                <option value="atencionalcliente">Atención al cliente</option>
+              </select>
+              <p className=" mt-1 text-xs italic text-red-500">{errors.role?.message || ''}</p>
+            </div>
+            <div className=" grid grid-cols-2 gap-2 px-5">
               <button
                 type="submit"
-                className="hover:bg-indigo-500 mt-12 flex w-full justify-center rounded-md bg-blue-action px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                className="hover:bg-indigo-500 mt-6 flex w-full justify-center rounded-md bg-blue-action px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
-                Registrarme
+                Update user
               </button>
-              <p className=" mt-1 text-xs italic text-red-500">{registerStatus.error?.message || ''}</p>
+              <button
+                type="button"
+                onClick={onClose}
+                className="mt-6 flex w-full justify-center rounded-md bg-red-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              >
+                Close
+              </button>
             </div>
           </form>
-
-          <p className="mt-10 text-center text-sm text-gray-500">
-            Ya estas registrado?{' '}
-            <Link to={'/login'} className="font-semibold leading-6 text-gray-500 hover:text-purple">
-              Inicia sesión
-            </Link>
-          </p>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
-export default Register;
+export default Modal;
