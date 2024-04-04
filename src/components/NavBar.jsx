@@ -1,11 +1,23 @@
 import { Link, useLocation } from 'react-router-dom';
 import useSession from '../hooks/useSession';
 import { useEffect } from 'react';
+import useStore from '../store/store';
 
 const NavBar = () => {
-  const { LoggedUser } = useSession();
+  // const { LoggedUser } = useSession();
   const location = useLocation();
   const currentUrl = location.pathname;
+
+  const { loggedUser, setLoggedUser } = useStore((state) => ({
+    loggedUser: state.loggedUser,
+    setLoggedUser: state.setLoggedUser,
+  }));
+  console.log(loggedUser);
+
+  const handleLogout = () => {
+    setLoggedUser(null);
+    navigate('/login');
+  };
 
   return (
     <nav>
@@ -33,19 +45,20 @@ const NavBar = () => {
             className={`bg-blue-linear mt-1 h-1 w-0 opacity-10 transition-all duration-700 ease-in-out group-hover:w-full ${window.location.pathname === '/manager' ? 'w-full opacity-75' : ''}`}
           />
         </li>
-        {/* <li className="group w-full hover:bg-soft-white">
+        <li className="group w-full hover:bg-soft-white">
           <Link to={'/profile'} className="text-blue flex min-w-full justify-between" href="">
             Perfil
             <span>👤</span>
           </Link>
-          <div className="mt-1 h-1 w-0 bg-blue-linear opacity-10 transition-all duration-700 ease-in-out group-hover:w-full" />
-        </li> */}
+          <div
+            cla
+            className={`bg-blue-linear mt-1 h-1 w-0 opacity-10 transition-all duration-700 ease-in-out group-hover:w-full ${window.location.pathname === '/profile' ? 'w-full opacity-75' : ''}`}
+          />
+        </li>
 
-        {(LoggedUser && (
+        {(loggedUser && (
           <li className="group w-full hover:bg-soft-white">
-            <Link to={'/logout'} href="">
-              Logout
-            </Link>
+            <button onClick={handleLogout}>Logout</button>
             <div
               className={`bg-blue-linear mt-1 h-1 w-0 opacity-10 transition-all duration-700 ease-in-out group-hover:w-full ${window.location.pathname === '/logout' ? 'w-full opacity-75' : ''}`}
             />

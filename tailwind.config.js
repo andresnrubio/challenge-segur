@@ -21,8 +21,10 @@ export default {
         redwood: '#322D4E',
         black: '#242424',
         purple: '#322D4E',
+        'blue-linear': '#002242',
       },
       backgroundColor: {
+        'soft-blue': '#e8eef2',
         'blue-gray': '#AEC2EA33',
         indigo: '#8D86C9',
         'soft-white': '#FBF5EF33',

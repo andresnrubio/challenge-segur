@@ -1,26 +1,32 @@
-import { useState } from 'react';
-import CryptoJS from 'crypto-js';
+import { useNavigate } from 'react-router-dom';
 import useUsers from './useUsers';
-import { useEffect } from 'react';
+import CryptoJS from 'crypto-js';
+import useStore from '../store/store';
 
 const useSession = () => {
-  const [LoggedUser, setLoggedUser] = useState({});
   const { users } = useUsers();
+  const navigate = useNavigate();
+  const {
+    users: storeUsers,
+    setLoggedUser,
+    addAllUsers,
+    removeUser,
+    loggedUser,
+  } = useStore((state) => ({
+    users: state.users,
+    setLoggedUser: state.setLoggedUser,
+    addAllUsers: state.addAllUsers,
+    removeUser: state.removeUser,
+    loggedUser: state.loggedUser,
+  }));
 
-  // useEffect(() => {
-  //   if (localStorage.getItem('user')) {
-  //     setIsLogged(true);
-  //   }
-  // }, []);
-
-  // const toggleSession = () => {
-  //   setIsLogged(!isLogged);
-  // };
+  if (storeUsers.length == 0) {
+    addAllUsers(users);
+  }
 
   const login = (data) => {
     try {
-      const user = users.find((user) => user.email === data.email);
-
+      const user = storeUsers.find((user) => user.email === data.email);
       if (!user) {
         throw new Error('correoNoRegistrado');
       }
@@ -32,11 +38,8 @@ const useSession = () => {
       // localStorage.setItem('encryptedData', encryptedData);
       // setEncryptedData(encryptedData);
 
-      localStorage.setItem(
-        'user',
-        JSON.stringify({ name: user.name, lastname: user.lastname, role: user.role, img: user.profileImg }),
-      );
-      setLoggedUser({ name: user.name, lastname: user.lastname, role: user.role, img: user.profileImg });
+      setLoggedUser(user);
+      navigate('/manager');
     } catch (error) {
       console.log(error);
       throw error;
@@ -54,15 +57,12 @@ const useSession = () => {
   // };
 
   const logout = () => {
-    localStorage.removeItem('user');
-    setLoggedUser({});
-    // toggleSession();
+    removeUser(loggedUser.id);
   };
 
   return {
     login,
     logout,
-    LoggedUser,
   };
 };
 

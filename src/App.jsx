@@ -9,7 +9,7 @@ function App() {
   };
 
   return (
-    <div className="flex bg-soft-white ">
+    <div className="flex max-h-screen bg-soft-white">
       <SideBar isOpen={isOpen} />
       <Main toggleSideBar={toggleSideBar} isOpen={isOpen} />
     </div>

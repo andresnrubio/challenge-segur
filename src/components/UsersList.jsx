@@ -1,9 +1,13 @@
 import React from 'react';
 import users from '../data/users.json';
+import useStore from '../store/store';
 const UsersList = () => {
+  const { loggedUser } = useStore((state) => ({
+    loggedUser: state.loggedUser,
+  }));
   return (
     <section className="flex flex-col">
-      {localStorage.getItem('user') ? (
+      {loggedUser ? (
         <>
           <p className="text-sm opacity-60">Mostrando {users.length} resultados </p>
           <ol className="mt-2 grid w-full grid-cols-4-50px/3fr border-b border-gray-200 px-4 pb-2">

@@ -6,7 +6,7 @@ const Main = () => {
     // <section className="h-screen max-h-svh w-full overflow-y-hidden">
     <section className="h-screen max-h-svh w-full">
       <Header />
-      <section className="container mx-auto mt-8 size-full max-h-full justify-start overflow-y-auto">
+      <section className="container mx-auto mt-8  justify-start overflow-y-auto">
         <Outlet />
       </section>
     </section>
