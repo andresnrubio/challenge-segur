@@ -5,10 +5,13 @@ const useStore = create((set) => ({
   loggedUser: null,
   createUser: (user) => set((state) => ({ users: [...state.users, user] })),
   removeAllUsers: () => set({ users: [] }),
-  addAllUsers: (users) => set({ users: users }),
-  addFilterUsers: () =>
+  removeOneUser: (userId) =>
     set((state) => {
-      // Definicion de roles
+      return { users: state.users.filter((user) => user.id !== userId) };
+    }),
+  addAllUsers: (users) => set({ users: users }),
+  addFilterUsersByRole: () =>
+    set((state) => {
       const rolesPermitted = {
         admin: ['admin', 'gerente', 'vendedor', 'consulta', 'atencionalcliente'],
         gerente: ['vendedor', 'consulta', 'atencionalcliente'],
@@ -17,7 +20,6 @@ const useStore = create((set) => ({
         consulta: [],
       };
 
-      // Filtro basado en el rol del usuario logueado
       const filteredUsers = state.users.filter((user) => rolesPermitted[state.loggedUser.role].includes(user.role));
 
       return { users: filteredUsers };

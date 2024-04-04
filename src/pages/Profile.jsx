@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import useStore from '../store/store';
-import Modal from '../components/Modal';
+import Modal from '../components/UserDetailModal';
+import edit from '../assets/edit_light.png';
 
 const Profile = () => {
   const [showModal, setShowModal] = useState(false);
@@ -83,10 +84,13 @@ const Profile = () => {
         </div>
       </div>
       <button
-        className="mt-6 rounded-md bg-blue-action px-2 py-1.5 text-xs font-bold text-white hover:bg-orange-700"
+        className="text-md mt-6 flex items-center gap-2 rounded-md bg-blue-action px-3 py-1.5 font-semibold tracking-wide text-white opacity-75 hover:bg-orange-700 hover:opacity-100"
         onClick={() => handleEditUser(loggedUser)}
       >
-        Editar
+        <span>
+          <img src={edit} alt="" className="h-6" />
+        </span>
+        Editar{' '}
       </button>
       {showModal && <Modal user={user} onClose={() => setShowModal(false)} />}
     </section>

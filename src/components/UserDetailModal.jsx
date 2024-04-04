@@ -1,13 +1,15 @@
 import { toast } from 'react-toastify';
 import useStore from '../store/store';
 import { useForm } from 'react-hook-form';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
-const Modal = ({ user, onClose }) => {
-  const { updateUser, loggedUser, setLoggedUser } = useStore((state) => ({
+const UserDetailModal = ({ user, onClose }) => {
+  const { users, updateUser, loggedUser, setLoggedUser, removeOneUser } = useStore((state) => ({
+    users: state.users,
     updateUser: state.updateUser,
     loggedUser: state.loggedUser,
     setLoggedUser: state.setLoggedUser,
+    removeOneUser: state.removeOneUser,
   }));
 
   const {
@@ -43,17 +45,17 @@ const Modal = ({ user, onClose }) => {
 
   return (
     <div className="fixed inset-0 z-10 overflow-y-auto">
-      <div className="flex min-h-screen content-center items-end justify-center px-4 pb-20 pt-4 text-center sm:block sm:p-0">
+      <div className="flex min-h-screen w-lvw content-center items-center justify-center px-4 pb-20 pt-4 text-center  sm:p-0">
         <div className="fixed inset-0 transition-opacity">
           <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
         </div>
 
         <div
-          className="inline-block transform overflow-hidden rounded-lg bg-white text-left align-bottom shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:align-middle"
+          className="flex w-full transform overflow-hidden rounded-lg bg-white text-left align-bottom shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:align-middle"
           id="modal-content"
         >
           <form
-            className="space-y-6 p-4"
+            className="w-4/5 space-y-6 p-4"
             onSubmit={handleSubmit(async (data) => {
               try {
                 const { name, lastname, email, countryCode, tel, role } = data;
@@ -200,4 +202,4 @@ const Modal = ({ user, onClose }) => {
   );
 };
 
-export default Modal;
+export default UserDetailModal;

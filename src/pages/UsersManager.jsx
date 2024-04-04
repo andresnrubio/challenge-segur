@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
 // import users from '../data/users.json';
 import useStore from '../store/store';
-import Modal from '../components/Modal';
+import UserDetailModal from '../components/UserDetailModal';
+import ConfirmationModal from '../components/ConfirmationModal';
+import deleteIcon from '../assets/delete_light.png';
+import editIcon from '../assets/edit_light.png';
+
 const UsersManager = () => {
   const [showModal, setShowModal] = useState(false);
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [user, setUser] = useState(null);
 
   const { users: storeUsers, loggedUser } = useStore((state) => ({
@@ -14,12 +19,16 @@ const UsersManager = () => {
     setUser(user);
     setShowModal(!showModal);
   };
+  const handleDeleteUser = (user) => {
+    setUser(user);
+    setShowConfirmationModal(!showConfirmationModal);
+  };
   return (
     <section className="flex flex-col">
       {loggedUser ? (
         <>
           <p className="text-sm opacity-60">Mostrando {storeUsers.length} resultados </p>
-          <ol className="mt-2 grid w-full grid-cols-4-50px/3fr border-b border-gray-200 px-4 pb-2">
+          <ol className="ml-16 mt-2 grid w-full grid-cols-4-50px/3fr border-b border-gray-200 px-4 pb-2">
             <li></li>
             <li>Nombre / Rol</li>
             <li>Correo Electronico</li>
@@ -28,10 +37,16 @@ const UsersManager = () => {
           {storeUsers.map((user) => (
             <div className="flex items-center border-b border-gray-200  bg-light-purple" key={user.id}>
               <button
-                className="rounded-md bg-blue-action px-2 py-1.5 text-xs font-bold text-white hover:bg-orange-700"
+                className="hover:bg-orange-700 mx-2 rounded-md bg-red-secondary px-1.5 py-1 text-xs font-bold text-white"
+                onClick={() => handleDeleteUser(user)}
+              >
+                <img src={deleteIcon} alt="" className="h-5" />
+              </button>
+              <button
+                className="hover:bg-orange-700 rounded-md bg-blue-action px-1.5 py-1 text-xs font-bold text-white"
                 onClick={() => handleEditUser(user)}
               >
-                Editar
+                <img src={editIcon} alt="" className="h-5" />
               </button>
               <div className="align-center grid w-full grid-cols-4-50px/3fr p-4 text-sm">
                 <img src={user.profileImg} alt="" className="h-10 w-auto self-center rounded-full bg-black" />
@@ -54,7 +69,8 @@ const UsersManager = () => {
       ) : (
         <h1>Debes iniciar sesion para acceder al gestor</h1>
       )}
-      {showModal && <Modal user={user} onClose={() => setShowModal(false)} />}
+      {showModal && <UserDetailModal user={user} onClose={() => setShowModal(false)} />}
+      {showConfirmationModal && <ConfirmationModal user={user} onClose={() => setShowConfirmationModal(false)} />}
     </section>
   );
 };

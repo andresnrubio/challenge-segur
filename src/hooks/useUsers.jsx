@@ -12,11 +12,11 @@ const useUsers = () => {
     users: storeUsers,
     setLoggedUser,
     createUser,
-    addFilterUsers,
+    addFilterUsersByRole,
   } = useStore((state) => ({
     users: state.users,
     setLoggedUser: state.setLoggedUser,
-    addFilterUsers: state.addFilterUsers,
+    addFilterUsersByRole: state.addFilterUsersByRole,
     createUser: state.createUser,
   }));
 
@@ -46,7 +46,7 @@ const useUsers = () => {
 
       createUser(newUser);
       setLoggedUser(newUser);
-      addFilterUsers();
+      addFilterUsersByRole();
 
       toast.success('Usuario registrado correctamente');
 
