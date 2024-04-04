@@ -1,7 +1,6 @@
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.png';
-
 import useCrypto from '../hooks/useCrypto';
 import useSession from '../hooks/useSession';
 
@@ -10,12 +9,14 @@ const secretKey = import.meta.env.VITE_REACT_APP_SECRET_KEY;
 const Login = () => {
   const { encryptedData, encryptAndSaveData, decryptData } = useCrypto();
   const { login } = useSession();
+  const navigate = useNavigate();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
     watch,
+    setError,
   } = useForm({
     defaultValues: {
       email: '',
@@ -39,8 +40,13 @@ const Login = () => {
             onSubmit={handleSubmit((data) => {
               try {
                 login(data);
+                navigate('/', { replace: true });
               } catch (error) {
-                console.log(error);
+                if (error.message === 'correoNoRegistrado') {
+                  setError('email', { message: 'El correo ingresado no se encuentra registrado' });
+                } else if (error.message === 'passwordIncorrecto') {
+                  setError('password', { message: 'Contraseña incorrecta' });
+                }
               }
             })}
           >
@@ -93,7 +99,7 @@ const Login = () => {
             <div>
               <button
                 type="submit"
-                className="hover:bg-indigo-500 bg-blue-action mt-12 flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                className="hover:bg-indigo-500 mt-12 flex w-full justify-center rounded-md bg-blue-action px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 Sign in
               </button>

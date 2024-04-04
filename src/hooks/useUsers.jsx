@@ -25,7 +25,15 @@ const useUsers = () => {
         return user.id > maxId ? user.id : maxId;
       }, 0);
 
-      setUsers([...users, { ...data, id: highestId + 1, role: 'consulta' }]);
+      setUsers([
+        ...users,
+        {
+          ...data,
+          id: highestId + 1,
+          role: 'consulta',
+          profileImg: `https://robohash.org/${data.name}${data.lastname}`,
+        },
+      ]);
 
       //* Se genera un inicio de sesion con el nuevo usuario
       localStorage.setItem('user', { name: data.name, lastname: data.lastname, role: data.role });

@@ -3,11 +3,15 @@ import App from './App';
 import Login from './components/Login';
 import Register from './components/Register.jsx';
 import UsersList from './components/UsersList.jsx';
+import Logout from './components/Logout.jsx';
+import Home from './components/Home.jsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
+      <Route path="/" element={<Home />} />
       <Route path="login" element={<Login />} />
+      <Route path="logout" element={<Logout />} />
       <Route path="register" element={<Register />} />
       <Route path="manager" element={<UsersList />} />
       {/* <Route path="" element={<Home />} />

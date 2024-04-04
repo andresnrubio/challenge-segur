@@ -1,13 +1,17 @@
-import { Outlet } from 'react-router-dom';
+import { useState } from 'react';
+import Main from './components/Main';
 import SideBar from './components/SideBar';
 
 function App() {
+  const [isOpen, setIsOpen] = useState(false);
+  const toggleSideBar = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
     <div className="flex bg-soft-white ">
-      <SideBar />
-      <main className="container mx-auto h-dvh justify-start overflow-y-auto py-16">
-        <Outlet />
-      </main>
+      <SideBar isOpen={isOpen} />
+      <Main toggleSideBar={toggleSideBar} isOpen={isOpen} />
     </div>
   );
 }
