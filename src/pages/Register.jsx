@@ -20,7 +20,7 @@ const Register = () => {
       tel: '',
     },
   });
-  const { users, registerNewUser, registerStatus } = useUsers();
+  const { registerNewUser, registerStatus } = useUsers();
 
   return (
     <>

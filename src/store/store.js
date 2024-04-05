@@ -3,7 +3,11 @@ import { create } from 'zustand';
 const useStore = create((set) => ({
   users: [],
   loggedUser: null,
-  createUser: (user) => set((state) => ({ users: [...state.users, user] })),
+  createUser: (newUser) =>
+    set((state) => {
+      const updatedUsers = [...state.users, newUser];
+      return { users: updatedUsers };
+    }),
   removeAllUsers: () => set({ users: [] }),
   removeOneUser: (userId) =>
     set((state) => {
@@ -16,8 +20,8 @@ const useStore = create((set) => ({
         admin: ['admin', 'gerente', 'vendedor', 'consulta', 'atencionalcliente'],
         gerente: ['vendedor', 'consulta', 'atencionalcliente'],
         atencionalcliente: ['vendedor', 'consulta'],
-        vendedor: [],
-        consulta: [],
+        vendedor: ['vendedor'],
+        consulta: ['consulta'],
       };
 
       const filteredUsers = state.users.filter((user) => rolesPermitted[state.loggedUser.role].includes(user.role));

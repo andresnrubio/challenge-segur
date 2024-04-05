@@ -1,16 +1,18 @@
 import { useNavigate } from 'react-router-dom';
 import useUsers from './useUsers';
-import CryptoJS from 'crypto-js';
 import useStore from '../store/store';
+import useStorage from './useStorage';
+import { useEffect } from 'react';
 
 const useSession = () => {
-  const { users } = useUsers();
+  const { saveAtStorage, getFromStorage } = useStorage();
+  const users = getFromStorage('users');
   const navigate = useNavigate();
   const {
     users: storeUsers,
     setLoggedUser,
     addAllUsers,
-    removeUser,
+    removeAllUsers,
     loggedUser,
     addFilterUsersByRole,
   } = useStore((state) => ({
@@ -18,7 +20,7 @@ const useSession = () => {
     setLoggedUser: state.setLoggedUser,
     addAllUsers: state.addAllUsers,
     addFilterUsersByRole: state.addFilterUsersByRole,
-    removeUser: state.removeUser,
+    removeAllUsers: state.removeAllUsers,
     loggedUser: state.loggedUser,
   }));
 
@@ -26,9 +28,22 @@ const useSession = () => {
     addAllUsers(users);
   }
 
+  // useEffect(() => {
+  //   const storage_users_data = getFromStorage('users');
+  //   if (storage_users_data) {
+  //     console.log('Hay data')
+  //     addAllUsers(storage_users_data);
+  //   } else {
+  //     console.log('No hay data')
+  //     console.log(storage_users_data)
+  //     saveAtStorage('users', users);
+  //     addAllUsers(users);
+  //   }
+  // }, []);
+
   const login = (data) => {
     try {
-      const user = storeUsers.find((user) => user.email === data.email);
+      const user = users.find((user) => user.email === data.email);
       if (!user) {
         throw new Error('correoNoRegistrado');
       }
@@ -36,12 +51,9 @@ const useSession = () => {
       if (user.password != data.password) {
         throw new Error('passwordIncorrecto');
       }
-      // const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(data), secretKey).toString();
-      // localStorage.setItem('encryptedData', encryptedData);
-      // setEncryptedData(encryptedData);
-
       setLoggedUser(user);
-      addFilterUsersByRole();
+      // saveAtStorage('users', storeUsers);
+      // addFilterUsersByRole();
       navigate('/manager');
     } catch (error) {
       console.log(error);
@@ -49,18 +61,9 @@ const useSession = () => {
     }
   };
 
-  // const decryptData = (secretKey) => {
-  //   const encryptedData = localStorage.getItem('encryptedData');
-  //   if (encryptedData) {
-  //     const bytes = CryptoJS.AES.decrypt(encryptedData, secretKey);
-  //     const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-  //     return decryptedData;
-  //   }
-  //   return null;
-  // };
-
   const logout = () => {
-    removeUser(loggedUser.id);
+    removeAllUsers();
+    setLoggedUser(null);
   };
 
   return {

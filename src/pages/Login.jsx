@@ -4,7 +4,7 @@ import logo from '../assets/logo.png';
 import useCrypto from '../hooks/useCrypto';
 import useSession from '../hooks/useSession';
 
-const secretKey = import.meta.env.VITE_REACT_APP_SECRET_KEY;
+// const secretKey = import.meta.env.VITE_REACT_APP_SECRET_KEY;
 
 const Login = () => {
   const { encryptedData, encryptAndSaveData, decryptData } = useCrypto();

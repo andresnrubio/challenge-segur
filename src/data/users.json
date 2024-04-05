@@ -1,13 +1,13 @@
 [
   {
     "id": 1,
-    "lastname": "Rubio",
-    "name": "Andres",
-    "password": "aA123456",
-    "profileImg": "https://robohash.org/AndresRubio",
+    "lastname": "Admin",
+    "name": "Admin",
+    "password": "Admin1234",
+    "profileImg": "https://robohash.org/adminadmin",
     "role": "admin",
     "countryCode": "54",
-    "email": "rubioandres1@gmail.com",
+    "email": "admin@admin",
     "tel": "11111222"
   },
   {

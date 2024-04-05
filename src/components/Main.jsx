@@ -3,9 +3,9 @@ import Header from './Header';
 
 const Main = () => {
   return (
-    <section className="h-screen max-h-svh w-full">
+    <section className="h-vh h-screen max-h-svh w-full overflow-auto">
       <Header />
-      <section className="container mx-auto mt-8  justify-start overflow-y-auto">
+      <section className="container mx-auto mt-28  justify-start overflow-y-auto">
         <Outlet />
       </section>
     </section>

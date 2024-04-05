@@ -1,21 +1,22 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import useStore from '../store/store';
-import users from '../assets/users_dark.png';
-import profile from '../assets/profile_dark.png';
-import home from '../assets/home_dark.png';
-import logout from '../assets/logout_dark.png';
+import usersIcon from '../assets/users_dark.png';
+import profileIcon from '../assets/profile_dark.png';
+import homeIcon from '../assets/home_dark.png';
+import logoutIcon from '../assets/logout_dark.png';
+import useSession from '../hooks/useSession';
 
 const NavBar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const currentUrl = location.pathname;
-
-  const { loggedUser, setLoggedUser } = useStore((state) => ({
+  const { logout } = useSession();
+  const { loggedUser } = useStore((state) => ({
     loggedUser: state.loggedUser,
-    setLoggedUser: state.setLoggedUser,
   }));
+
   const handleLogout = () => {
-    setLoggedUser(null);
+    logout();
     navigate('/login');
   };
 
@@ -33,7 +34,7 @@ const NavBar = () => {
               <Link to={'/'} className=" text-blue flex min-w-full justify-between  text-lg " href="">
                 Inicio
                 <span>
-                  <img src={home} alt="" className="h-6" />
+                  <img src={homeIcon} alt="" className="h-6" />
                 </span>
               </Link>
               <div
@@ -44,7 +45,7 @@ const NavBar = () => {
               <Link to={'/manager'} className="text-blue flex min-w-full justify-between" href="">
                 Gestion de usuarios
                 <span>
-                  <img src={users} alt="" className="h-6" />
+                  <img src={usersIcon} alt="" className="h-6" />
                 </span>
               </Link>
               <div
@@ -55,7 +56,7 @@ const NavBar = () => {
               <Link to={'/profile'} className="text-blue flex min-w-full justify-between" href="">
                 Perfil
                 <span>
-                  <img src={profile} alt="" className="h-6" />
+                  <img src={profileIcon} alt="" className="h-6" />
                 </span>
               </Link>
               <div
@@ -70,7 +71,7 @@ const NavBar = () => {
                 <button onClick={handleLogout} className="text-blue flex min-w-full justify-between">
                   Logout
                   <span>
-                    <img src={logout} alt="" className="h-6" />
+                    <img src={logoutIcon} alt="" className="h-6" />
                   </span>
                 </button>
 

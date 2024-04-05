@@ -2,16 +2,15 @@ import { toast } from 'react-toastify';
 import useStore from '../store/store';
 import { useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
+import warning from '../assets/warning.png';
+import useStorage from '../hooks/useStorage';
 
 const ConfirmationModal = ({ user, onClose }) => {
-  const { users, updateUser, loggedUser, setLoggedUser, removeOneUser } = useStore((state) => ({
+  const { addAllUsers, users: storeUsers } = useStore((state) => ({
     users: state.users,
-    updateUser: state.updateUser,
-    loggedUser: state.loggedUser,
-    setLoggedUser: state.setLoggedUser,
-    removeOneUser: state.removeOneUser,
+    addAllUsers: state.addAllUsers,
   }));
-
+  const { removeUserAtStorage, getFromStorage } = useStorage();
   const {
     register,
     handleSubmit,
@@ -27,7 +26,6 @@ const ConfirmationModal = ({ user, onClose }) => {
       role: user.role,
     },
   });
-  const shouldUpdateLoggedUser = () => loggedUser.id === user.id;
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -55,10 +53,12 @@ const ConfirmationModal = ({ user, onClose }) => {
           id="modal-content"
         >
           <form
-            className="mb-4 w-4/5 space-y-6 p-4"
+            className="mb-4 flex w-full flex-col items-center p-4"
             onSubmit={handleSubmit(async (data) => {
               try {
-                removeOneUser(user.id);
+                removeUserAtStorage('users', user.id);
+                addAllUsers(getFromStorage('users'));
+                // saveAtStorage('users', storeUsers);
                 toast.success('Usuario eliminado correctamente');
                 onClose();
               } catch (error) {
@@ -66,28 +66,26 @@ const ConfirmationModal = ({ user, onClose }) => {
               }
             })}
           >
-            <img src="" alt="WARNING" />
-            <h2 className="text-blue-linear mt-2 text-center text-2xl font-bold leading-9 tracking-tight">
-              Esta seguro?
-            </h2>
+            <img src={warning} alt="WARNING" className="h-auto w-24" />
+            <h2 className="text-center text-2xl font-bold leading-9 tracking-tight text-blue-linear">Esta seguro?</h2>
             <p className="text-sm">
-              Esta por eliminar el usuario:{' '}
-              <span className="text-lg font-semibold">
+              Está por eliminar el usuario:{' '}
+              <span className="underline-offset-3 text-lg font-semibold underline">
                 {user.name} {user.lastname}
               </span>
             </p>
-            <p className="block text-sm font-medium leading-6 text-gray-900">Esta accion no se puede deshacer</p>
+            <p className="block text-sm font-medium leading-6 text-gray-900 ">ESTA ACCION NO SE PUEDE DESHACER</p>
             <div className="  grid grid-cols-2 gap-2 px-5">
               <button
-                type="submit"
-                className="hover:bg-soft-blue text-blue-linear mt-6 flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                type="button"
+                onClick={onClose}
+                className="mt-6 flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-blue-linear hover:bg-soft-blue focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 Cancelar
               </button>
               <button
                 className="mt-6 flex w-full justify-center rounded-md bg-red-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                type="button"
-                onClick={onClose}
+                type="submit"
               >
                 Eliminar usuario
               </button>

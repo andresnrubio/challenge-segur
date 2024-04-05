@@ -1,16 +1,23 @@
 import { toast } from 'react-toastify';
 import useStore from '../store/store';
 import { useForm } from 'react-hook-form';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import useStorage from '../hooks/useStorage';
 
 const UserDetailModal = ({ user, onClose }) => {
-  const { users, updateUser, loggedUser, setLoggedUser, removeOneUser } = useStore((state) => ({
+  const {
+    users: storeUsers,
+    updateUser,
+    loggedUser,
+    setLoggedUser,
+  } = useStore((state) => ({
     users: state.users,
     updateUser: state.updateUser,
     loggedUser: state.loggedUser,
     setLoggedUser: state.setLoggedUser,
     removeOneUser: state.removeOneUser,
   }));
+  const { updateUserAtStorage, getFromStorage } = useStorage();
 
   const {
     register,
@@ -25,8 +32,12 @@ const UserDetailModal = ({ user, onClose }) => {
       tel: user.tel,
       countryCode: user.countryCode,
       role: user.role,
+      id: user.id,
     },
   });
+  const { addAllUsers } = useStore((state) => ({
+    addAllUsers: state.addAllUsers,
+  }));
   const shouldUpdateLoggedUser = () => loggedUser.id === user.id;
 
   useEffect(() => {
@@ -51,14 +62,14 @@ const UserDetailModal = ({ user, onClose }) => {
         </div>
 
         <div
-          className="flex w-full transform overflow-hidden rounded-lg bg-white text-left align-bottom shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:align-middle"
+          className="flex w-full transform place-content-center overflow-hidden rounded-lg bg-white text-left align-bottom shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:align-middle"
           id="modal-content"
         >
           <form
             className="w-4/5 space-y-6 p-4"
             onSubmit={handleSubmit(async (data) => {
               try {
-                const { name, lastname, email, countryCode, tel, role } = data;
+                const { name, lastname, email, countryCode, tel, role, id } = data;
                 const userData = {
                   name,
                   lastname,
@@ -66,9 +77,12 @@ const UserDetailModal = ({ user, onClose }) => {
                   role,
                   countryCode,
                   tel,
+                  id,
                 };
 
-                updateUser({ ...user, ...userData });
+                updateUserAtStorage('users', userData);
+                addAllUsers(getFromStorage('users'));
+
                 toast.success('Usuario actualizado correctamente');
                 if (shouldUpdateLoggedUser()) {
                   setLoggedUser({ ...loggedUser, ...userData });
