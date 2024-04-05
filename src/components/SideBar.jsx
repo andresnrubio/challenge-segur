@@ -6,7 +6,7 @@ const SideBar = () => {
   const isOpen = true;
 
   return isOpen ? (
-    <div className="min-h-vh bg-soft-blue z-10 row-span-2 h-dvh w-72 min-w-64 transition-all duration-700 ease-in-out">
+    <div className="min-h-vh z-10 row-span-2 h-dvh w-72 min-w-64 bg-soft-blue transition-all duration-700 ease-in-out">
       <Title />
       <NavBar />
     </div>

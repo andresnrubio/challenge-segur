@@ -26,7 +26,7 @@ const useStorage = () => {
   };
 
   const emptyStorage = (storageName) => {
-    saveAtStorage(storageName, []);
+    saveAtStorage(storageName, null);
   };
   return { saveAtStorage, getFromStorage, createUserAtStorage, updateUserAtStorage, removeUserAtStorage, emptyStorage };
 };

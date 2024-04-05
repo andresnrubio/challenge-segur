@@ -48,18 +48,22 @@ const UsersManager = () => {
           {storeUsers?.map((user) => {
             return user.id !== loggedUser.id ? (
               <div className="flex items-center border-b border-gray-200  bg-light-purple" key={user.id}>
-                <button
-                  className="hover:bg-orange-700 mx-2 rounded-md bg-red-secondary px-1.5 py-1 text-xs font-bold text-white"
-                  onClick={() => handleDeleteUser(user)}
-                >
-                  <img src={deleteIcon} alt="" className="h-5" />
-                </button>
-                <button
-                  className="hover:bg-orange-700 rounded-md bg-blue-action px-1.5 py-1 text-xs font-bold text-white"
-                  onClick={() => handleEditUser(user)}
-                >
-                  <img src={editIcon} alt="" className="h-5" />
-                </button>
+                {loggedUser.canEdit && (
+                  <>
+                    <button
+                      className="hover:bg-orange-700 mx-2 rounded-md bg-red-secondary px-1.5 py-1 text-xs font-bold text-white"
+                      onClick={() => handleDeleteUser(user)}
+                    >
+                      <img src={deleteIcon} alt="" className="h-5" />
+                    </button>
+                    <button
+                      className="hover:bg-orange-700 rounded-md bg-blue-action px-1.5 py-1 text-xs font-bold text-white"
+                      onClick={() => handleEditUser(user)}
+                    >
+                      <img src={editIcon} alt="" className="h-5" />
+                    </button>
+                  </>
+                )}
                 <div className="align-center grid w-full grid-cols-4-50px/3fr p-4 text-sm">
                   <img src={user.profileImg} alt="" className="h-10 w-auto self-center rounded-full bg-black" />
                   <div className="flex">

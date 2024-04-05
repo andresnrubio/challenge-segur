@@ -13,9 +13,14 @@ export default {
       },
     },
     extend: {
+      width: {
+        'fit-available': '-webkit-fill-available',
+      },
+      zIndex: {
+        2: 2,
+      },
       textColor: {
         'blue-gray': '#AEC2EA',
-        indigo: '#8D86C9',
         'soft-white': '#FBF5EF33',
         'light-purple': '#F2F1F933',
         redwood: '#322D4E',
@@ -26,7 +31,6 @@ export default {
       backgroundColor: {
         'soft-blue': '#e8eef2',
         'blue-gray': '#AEC2EA33',
-        indigo: '#8D86C9',
         'soft-white': '#FBF5EF33',
         'light-purple': '#F2F1F933',
         redwood: '#322D4E',

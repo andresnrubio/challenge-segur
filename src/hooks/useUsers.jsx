@@ -43,21 +43,24 @@ const useUsers = () => {
             message: 'Ya existe un registro con ese correo',
           },
         });
-        toast.error('Ya existe un registro con ese correo');
-        // throw new Error('Ya existe un registro con ese correo');
+        // toast.error('Ya existe un registro con ese correo');
+        throw new Error('Ya existe un registro con ese correo');
       }
 
       const nextId = getMaxId() + 1;
-      const newUser = { ...data, id: nextId, role: 'consulta', profileImg: `https://robohash.org/${data.name}` };
+      const newUser = {
+        ...data,
+        id: nextId,
+        role: data.role || 'consulta',
+        profileImg: `https://robohash.org/${data.name}`,
+      };
 
       createUserAtStorage('users', newUser);
 
       await createUser(newUser);
-      setLoggedUser(newUser);
+      return newUser;
 
       // toast.success('Usuario registrado correctamente');
-
-      navigate('/manager');
     } catch (error) {
       throw error;
     }

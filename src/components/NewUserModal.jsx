@@ -2,23 +2,13 @@ import { toast } from 'react-toastify';
 import useStore from '../store/store';
 import { useForm } from 'react-hook-form';
 import { useEffect } from 'react';
-import useStorage from '../hooks/useStorage';
+import useUsers from '../hooks/useUsers';
 
-const NewUserModal = ({ user, onClose }) => {
-  const {
-    users: storeUsers,
-    addAllUsers,
-    loggedUser,
-    setLoggedUser,
-  } = useStore((state) => ({
-    users: state.users,
-    updateUser: state.updateUser,
+const UserDetailModal = ({ onClose }) => {
+  const { loggedUser } = useStore((state) => ({
     loggedUser: state.loggedUser,
-    setLoggedUser: state.setLoggedUser,
-    removeOneUser: state.removeOneUser,
-    addAllUsers: state.addAllUsers,
   }));
-  const { updateUserAtStorage, getFromStorage } = useStorage();
+  const { registerNewUser } = useUsers();
 
   const {
     register,
@@ -27,17 +17,15 @@ const NewUserModal = ({ user, onClose }) => {
     watch,
   } = useForm({
     defaultValues: {
-      name: user.name,
-      lastname: user.lastname,
-      email: user.email,
-      tel: user.tel,
-      countryCode: user.countryCode,
-      role: user.role,
-      id: user.id,
-      password: user.password,
+      name: '',
+      lastname: '',
+      email: '',
+      tel: '',
+      countryCode: '',
+      role: 'consulta',
+      password: '',
     },
   });
-  const shouldUpdateLoggedUser = () => loggedUser.id === user.id;
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -54,7 +42,7 @@ const NewUserModal = ({ user, onClose }) => {
   }, [onClose]);
 
   return (
-    <div className="fixed inset-0 z-10 overflow-y-auto">
+    <div className="fixed inset-0 z-30 overflow-y-auto">
       <div className="flex min-h-screen w-lvw content-center items-center justify-center px-4 pb-20 pt-4 text-center  sm:p-0">
         <div className="fixed inset-0 transition-opacity">
           <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
@@ -68,26 +56,15 @@ const NewUserModal = ({ user, onClose }) => {
             className="w-4/5 space-y-6 p-4"
             onSubmit={handleSubmit(async (data) => {
               try {
-                const { name, lastname, email, countryCode, tel, role, id, password } = data;
                 const userData = {
-                  name,
-                  lastname,
-                  email,
-                  role,
-                  countryCode,
-                  tel,
-                  id,
-                  password,
+                  name: data.name,
+                  lastname: data.lastname,
+                  email: data.email,
+                  password: data.password,
+                  countryCode: data.countryCode,
+                  tel: data.tel,
                 };
-
-                updateUserAtStorage('users', userData);
-                addAllUsers(getFromStorage('users'));
-
-                toast.success('Usuario actualizado correctamente');
-                if (shouldUpdateLoggedUser()) {
-                  setLoggedUser({ ...loggedUser, ...userData });
-                }
-
+                const newUser = await registerNewUser(userData);
                 onClose();
               } catch (error) {
                 console.log(error);
@@ -173,7 +150,55 @@ const NewUserModal = ({ user, onClose }) => {
               />
               <p className=" mt-1 text-xs italic text-red-500">{errors.email?.message || ''}</p>
             </div>
+            <div className="flex justify-between">
+              <div>
+                <div className="flex items-center justify-between">
+                  <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
+                    Contraseña
+                  </label>
+                </div>
+                <input
+                  {...register('password', {
+                    required: 'Complete el campo',
+                    minLength: {
+                      value: 8,
+                      message: 'La contraseña debe tener mínimo 8 caracteres',
+                    },
+                    pattern: {
+                      value: /(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}/,
+                      message:
+                        'Por seguridad la contraseña debe incluir al menos una mayúscula, una minúscula y un número',
+                    },
+                  })}
+                  id="password"
+                  name="password"
+                  type="password"
+                  autoComplete="current-password"
+                  className="mt-2 block rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                />
+                <p className=" mt-1 text-xs italic text-red-500">{errors.password?.message || ''}</p>
+              </div>
 
+              <div>
+                <div className="flex items-center justify-between">
+                  <label htmlFor="passwordConfirmation" className="block text-sm font-medium leading-6 text-gray-900">
+                    Confirma contraseña
+                  </label>
+                </div>
+                <input
+                  {...register('passwordConfirmation', {
+                    validate: (value) => {
+                      return value === watch('password') || 'La contraseña no coincide';
+                    },
+                  })}
+                  id="passwordConfirmation"
+                  name="passwordConfirmation"
+                  type="password"
+                  className="mt-2 block rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                />
+                <p className=" mt-1 text-xs italic text-red-500">{errors.passwordConfirmation?.message || ''}</p>
+              </div>
+            </div>
             <div>
               <label htmlFor="role" className="block text-sm font-medium leading-6 text-gray-900">
                 Role
@@ -200,7 +225,7 @@ const NewUserModal = ({ user, onClose }) => {
                 type="submit"
                 className="hover:bg-indigo-500 mt-6 flex w-full justify-center rounded-md bg-blue-action px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
-                Update user
+                Crear Usuario
               </button>
               <button
                 type="button"
@@ -217,4 +242,4 @@ const NewUserModal = ({ user, onClose }) => {
   );
 };
 
-export default NewUserModal;
+export default UserDetailModal;

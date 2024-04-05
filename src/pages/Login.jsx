@@ -1,13 +1,11 @@
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.png';
-import useCrypto from '../hooks/useCrypto';
+// import useCrypto from '../hooks/useCrypto';
 import useSession from '../hooks/useSession';
 
-// const secretKey = import.meta.env.VITE_REACT_APP_SECRET_KEY;
-
 const Login = () => {
-  const { encryptedData, encryptAndSaveData, decryptData } = useCrypto();
+  // const { encryptedData, encryptAndSaveData, decryptData } = useCrypto();
   const { login } = useSession();
   const navigate = useNavigate();
 

@@ -21,7 +21,7 @@ const useStore = create((set) => ({
         gerente: ['vendedor', 'consulta', 'atencionalcliente'],
         atencionalcliente: ['vendedor', 'consulta'],
         vendedor: ['vendedor'],
-        consulta: ['consulta'],
+        consulta: ['gerente', 'vendedor', 'consulta', 'atencionalcliente'],
       };
 
       const filteredUsers = state.users.filter((user) => rolesPermitted[state.loggedUser.role].includes(user.role));
@@ -41,7 +41,7 @@ const useStore = create((set) => ({
   setLoggedUser: (user) =>
     set((state) => ({
       ...state,
-      loggedUser: user,
+      loggedUser: user ? { ...user, ...{ canEdit: user?.role !== 'consulta' } } : null,
     })),
 }));
 

@@ -2,10 +2,14 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import logo from '../assets/logo.png';
-import useCrypto from '../hooks/useCrypto';
+import { useNavigate } from 'react-router-dom';
 import useUsers from '../hooks/useUsers';
 
 const Register = () => {
+  const navigate = useNavigate();
+  const { setLoggedUser } = useStore((state) => ({
+    setLoggedUser: state.setLoggedUser,
+  }));
   const {
     register,
     handleSubmit,
@@ -43,7 +47,9 @@ const Register = () => {
                   countryCode: data.countryCode,
                   tel: data.tel,
                 };
-                await registerNewUser(userData);
+                const newUser = await registerNewUser(userData);
+                setLoggedUser(newUser);
+                navigate('/manager', { replace: true });
               } catch (error) {
                 console.log(error);
               }

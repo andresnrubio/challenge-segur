@@ -58,7 +58,6 @@ const ConfirmationModal = ({ user, onClose }) => {
               try {
                 removeUserAtStorage('users', user.id);
                 addAllUsers(getFromStorage('users'));
-                // saveAtStorage('users', storeUsers);
                 toast.success('Usuario eliminado correctamente');
                 onClose();
               } catch (error) {

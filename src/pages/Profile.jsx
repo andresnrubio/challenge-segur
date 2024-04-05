@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import useStore from '../store/store';
-import Modal from '../components/UserDetailModal';
 import edit from '../assets/edit_light.png';
+import UserDetailModal from '../components/UserDetailModal';
 
 const Profile = () => {
   const [showModal, setShowModal] = useState(false);
@@ -22,7 +22,7 @@ const Profile = () => {
         <img
           src={loggedUser.profileImg}
           alt=""
-          className="border-blue-linear border-1 h-auto w-24 rounded-full bg-blue-100 opacity-90 hover:opacity-100"
+          className="h-auto w-24 rounded-full border-1 border-blue-linear bg-blue-100 opacity-90 hover:opacity-100"
         />
         <div className="flex w-full gap-4">
           <div className="w-full">
@@ -84,7 +84,7 @@ const Profile = () => {
         </div>
       </div>
       <button
-        className="text-md mt-6 flex items-center gap-2 rounded-md bg-blue-action px-3 py-1.5 font-semibold tracking-wide text-white opacity-75 hover:bg-orange-700 hover:opacity-100"
+        className="text-md hover:bg-orange-700 mt-6 flex items-center gap-2 rounded-md bg-blue-action px-3 py-1.5 font-semibold tracking-wide text-white opacity-75 hover:opacity-100"
         onClick={() => handleEditUser(loggedUser)}
       >
         <span>
@@ -92,7 +92,7 @@ const Profile = () => {
         </span>
         Editar{' '}
       </button>
-      {showModal && <Modal user={user} onClose={() => setShowModal(false)} />}
+      {showModal && <UserDetailModal user={user} onClose={() => setShowModal(false)} />}
     </section>
   );
 };
