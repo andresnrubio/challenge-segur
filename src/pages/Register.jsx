@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import logo from '../assets/logo.png';
 import { useNavigate } from 'react-router-dom';
 import useUsers from '../hooks/useUsers';
+import useStore from '../store/store';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -187,7 +188,7 @@ const Register = () => {
             <div>
               <button
                 type="submit"
-                className="hover:bg-indigo-500 mt-12 flex w-full justify-center rounded-md bg-blue-action px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                className="mt-12 flex w-full justify-center rounded-md bg-blue-action px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 Registrarme
               </button>
